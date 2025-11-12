@@ -7,7 +7,7 @@ from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
 
 from .base_client import BaseApiClient
-from core.models import ApiChunkResult
+from ...core.models import ApiChunkResult
 
 logger = logging.getLogger(__name__)
 

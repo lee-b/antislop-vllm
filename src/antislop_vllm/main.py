@@ -19,14 +19,14 @@ except ImportError:
 
 from tqdm import tqdm
 
-from utils.helpers import load_config, merge_configs, add_common_generation_cli_args
-from utils.slop_helpers import load_slop_phrases
-from utils.regex_helpers import load_regex_patterns
-from api_client.api_client import ApiClient
-from validators.slop_phrase_validator import SlopPhraseValidator
-from validators.regex_validator import RegexValidator
+from .utils.helpers import load_config, merge_configs, add_common_generation_cli_args
+from .utils.slop_helpers import load_slop_phrases
+from .utils.regex_helpers import load_regex_patterns
+from .api_client.api_client import ApiClient
+from .validators.slop_phrase_validator import SlopPhraseValidator
+from .validators.regex_validator import RegexValidator
 # NGramValidator is imported conditionally below
-from core.sampler import ApiAntiSlopSampler
+from .core.sampler import ApiAntiSlopSampler
 
 # Base logging config - this is just an initial setup, will be fully configured in main_cli
 # Set to a high level initially to minimize output before full config
@@ -123,7 +123,7 @@ def _setup_validators(cfg: Dict[str, Any], main_logger: logging.Logger) -> List[
 
     # --- N-Gram Validator ---
     try:
-        from validators.ngram_validator import NGramValidator # Assuming this import is fine
+        from .validators.ngram_validator import NGramValidator # Assuming this import is fine
         
         ngram_validator_config = cfg.get("ngram_validator", {}) # This reflects CLI overrides
         banned_ngrams_for_validator: List[Union[str, List[str]]] = []
@@ -283,7 +283,7 @@ def handle_server_mode(cfg: Dict[str, Any], args: argparse.Namespace, main_logge
 
     try:
         import uvicorn
-        from api_server.server import app, setup_shared_resources
+        from .api_server.server import app, setup_shared_resources
     except ImportError:
         main_logger.critical("Please install 'fastapi' and 'uvicorn' to run the server: pip install fastapi uvicorn[standard]")
         sys.exit(1)
@@ -562,7 +562,7 @@ def generate_for_prompt_worker(
         and final_generated_text.strip()            # ← skip when empty
     ):
         try:
-            from utils.refusal_detector import RefusalDetector
+            from .utils.refusal_detector import RefusalDetector
             detector = RefusalDetector.get(
                 config.get("refusal_model_id", "NousResearch/Minos-v1")
             )
@@ -623,7 +623,7 @@ def handle_batch_generation(
     # ──────────────────────────────────────────────────────────────────
     #  ftpo-pair writer: enabled for iter_>0 and auto-names the file
     # ──────────────────────────────────────────────────────────────────
-    from utils.ftpo_pairs_helper import ftpoPairWriter
+    from .utils.ftpo_pairs_helper import ftpoPairWriter
     # Resolve path precedence: CLI > config > None
     ftpo_path = None
     if hasattr(args, "ftpo_pairs_jsonl") and args.ftpo_pairs_jsonl is not None:
@@ -940,7 +940,7 @@ def main_cli():
     app_logger = logging.getLogger() # Get root logger
 
     if cfg.get("chat_template_model_id"):
-        from utils.chat_template_helper import ChatTemplateFormatter
+        from .utils.chat_template_helper import ChatTemplateFormatter
         try:
             chat_formatter = ChatTemplateFormatter(
                 cfg["chat_template_model_id"],
@@ -1015,4 +1015,6 @@ def main_cli():
 
 
 if __name__ == "__main__":
+    logging.info("Starting main_cli with updated imports")
     main_cli()
+    logging.info("main_cli executed successfully")

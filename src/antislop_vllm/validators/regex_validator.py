@@ -6,8 +6,8 @@ from concurrent.futures import ProcessPoolExecutor, TimeoutError
 from typing import List, Optional, Dict, Tuple, Any
 
 from .base_validator import BaseValidator
-from state.generation_state import GenerationState
-from core.models import ViolationInfo
+from ...state.generation_state import GenerationState
+from ...core.models import ViolationInfo
 
 logger = logging.getLogger(__name__)
 

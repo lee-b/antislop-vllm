@@ -9,10 +9,10 @@ import copy
 from fastapi import FastAPI, Request, Response, status
 from fastapi.concurrency import run_in_threadpool
 
-from api_client.base_client import BaseApiClient
-from core.sampler import ApiAntiSlopSampler
-from validators.base_validator import BaseValidator
-from utils.chat_template_helper import ChatTemplateFormatter
+from ..api_client.base_client import BaseApiClient
+from ..core.sampler import ApiAntiSlopSampler
+from ..validators.base_validator import BaseValidator
+from ..utils.chat_template_helper import ChatTemplateFormatter
 
 # --- Globals for shared resources ---
 # These will be populated by main.py at startup.

@@ -7,8 +7,8 @@ from collections import Counter # Not strictly needed for validator, but good fo
 import nltk
 
 from .base_validator import BaseValidator
-from state.generation_state import GenerationState
-from core.models import ViolationInfo
+from ...state.generation_state import GenerationState
+from ...core.models import ViolationInfo
 
 logger = logging.getLogger(__name__)
 

@@ -29,16 +29,16 @@ from typing import Dict, Generator, List, Optional, Tuple, Callable, Any
 
 import tiktoken # Added tiktoken
 
-from api_client.base_client import BaseApiClient
-from core.models import ViolationInfo
-from state.generation_state import (
+from ..api_client.base_client import BaseApiClient
+from .models import ViolationInfo
+from ..state.generation_state import (
     GenerationState,
     _decode_token,
     _tokens_to_text,
 )
-from validators.base_validator import BaseValidator
-from validators.slop_phrase_validator import SlopPhraseValidator
-from utils.sampler_helpers import select_tail_tokens
+from ..validators.base_validator import BaseValidator
+from ..validators.slop_phrase_validator import SlopPhraseValidator
+from ..utils.sampler_helpers import select_tail_tokens
 import csv, time, datetime, os
 import requests
 from threading import Lock
