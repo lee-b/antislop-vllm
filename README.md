@@ -72,28 +72,29 @@ AntiSlop-vLLM can be used for single prompt completions or for generating entire
 
 ## Installation & Setup
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/sam-paech/antislop-vllm.git
-    cd antislop-vllm
-    ```
+1.  **Clone this repository**. See `git`'s documentation if unsure about this.
 
-2.  **Install dependencies:**
-    ```bash
-    pip install -r requirements.txt
-    ```
+2.  **Install astral's `uv`. See https://astral.sh for instructions for your OS.
 
-3.  **NLTK Data:** The scripts will attempt to download necessary NLTK resources (`punkt` for tokenization, `stopwords` for n-gram validation) if they are not found. You can also download them manually:
+2.  **Build**: `uv build`
+
+3.  **Install the built package**: `uv tool install dist/*.whl`
+
+4.  **NLTK Data:** The scripts will attempt to download necessary NLTK resources (`punkt` for tokenization, `stopwords` for n-gram validation) if they are not found. You can also download them manually:
     ```python
     import nltk
     nltk.download('punkt')
     nltk.download('stopwords')
     ```
 
-4.  **Configure `config.yaml`:**
-    *   Copy `config-example.yaml` to `config.yaml`.
-    *   Edit `config.yaml` to set your API endpoint (`api_base_url`), API key (if required), `model_name`, paths to ban lists, and default generation parameters.
-    *   Example ban lists are provided in the `banlists/` directory. You should curate your own for best results.
+5.  **Configure `config.yaml`:**
+    *   Copy `docs/examples/example-config/` to `config/` (so `cp -r docs/examples/example-config/ config/` within this directory).
+    *   Edit `config/config.yaml` to set your API endpoint (`api_base_url`), API key (if required), `model_name`, paths to ban lists, and default generation parameters.
+    *   Example ban lists should be present in the `config/banlists/` directory if you copied the example config correctly. You should curate your own for best results.
+    *   To run the tool, do `cd config && antislop-vllm --config config.yaml`
+
+6. Point your Chatbot UX (or other OpenAI-API-compatible clients) at the service's configured host and port (e.g., the --openai-api-port command line argument), default is port 8000, so `http://localhost:8000/v1`.
+
 
 ## Usage
 
@@ -116,7 +117,7 @@ Modify `config.yaml` for persistent settings. Key options include:
 Generates a single "unslotted" output for a given prompt and prints it to the console.
 
 ```bash
-python main.py \
+antislop-vllm
     --api-base-url "http://localhost:8000/v1" \
     --api-key "YOUR_API_KEY_OR_XXX" \
     --model-name "Qwen/Qwen3-4B" \
@@ -199,26 +200,17 @@ While `antislop-vllm` is based on the concepts of the original `antislop-sampler
 
 ## Project Structure
 
-*   `main.py`: Main script for single/batch generation.
-*   `auto_unslop.py`: Iterative anti-slop and ban list refinement pipeline.
-*   `config.yaml` (and `config-example.yaml`): Configuration files.
-*   `api_client/`: Contains `ApiClient` for interacting with OpenAI-compatible APIs.
-*   `core/`:
-    *   `sampler.py`: `ApiAntiSlopSampler` - the core logic for generation, validation, and backtracking.
-    *   `models.py`: Dataclasses for API results and violation info.
-*   `state/`:
-    *   `generation_state.py`: Manages the state of the text being generated.
-*   `validators/`: Implements different validation strategies (`SlopPhraseValidator`, `RegexValidator`, `NGramValidator`).
-*   `utils/`: Helper functions for configuration, string manipulation, chat templates, refusal detection, etc.
-*   `banlists/`: Directory for example ban list files (JSON format). **Users should curate their own lists.**
-*   `data/`: Can store auxiliary data like human writing profiles for `auto_unslop.py`.
-*   `results/`: Default output directory for batch generations and `auto_unslop.py` experiments.
-*   `example_run_antislop_vllm.ipynb`: Jupyter notebook with usage examples.
+*   `pyproject.toml`: The python project file for building, managing dependencies, etc. This project uses Astral's `uv` tool.
+*   `src/`: The source code
+*   `example-config/`: examples of configuration, ban lists, etc. Copy this directory and modify as needed, for your own custom configuration
+*   `data/`: Can store auxiliary data like human writing profiles for `src/antislop_vllm/auto_unslop.py`.
+*   `results/`: Default output directory for batch generations and `src/antislop_vllm/auto_unslop.py` experiments.
+*   `docs/examples/example_run_antislop_vllm.ipynb`: Jupyter notebook with usage examples.
 
 ## Disclaimers
 
 *   This is research-grade code and may contain bugs or be a work in progress.
-*   The effectiveness of "unslopping" heavily depends on the quality of your ban lists. The provided examples are starting points; **it's highly recommended to curate your own lists** tailored to your specific model and use case. The `auto_unslop.py` script can help in this process.
+*   The effectiveness of "unslopping" heavily depends on the quality of your ban lists. The provided examples are starting points; **it's highly recommended to curate your own lists** tailored to your specific model and use case. The `src/antislop_vllm/auto_unslop.py` script can help in this process.
 *   Ensure your API endpoint correctly implements the `/v1/completions` specification and reliably returns top logprobs for backtracking to function effectively.
 
 ## Contributing
