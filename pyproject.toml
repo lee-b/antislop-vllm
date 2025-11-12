@@ -1,0 +1,17 @@
+[project]
+name = "antislop-vllm"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "Lee Braiden", email = "leebraid@gmail.com" }
+]
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+antislop-vllm = "antislop_vllm:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
