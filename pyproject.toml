@@ -1,10 +1,10 @@
 [project]
 name = "antislop-vllm"
 version = "0.1.0"
-description = "Add your description here"
+description = "OpenAI text-completions compatible anti-slop vLLM proxy"
 readme = "README.md"
 authors = [
-    { name = "Lee Braiden", email = "leebraid@gmail.com" }
+    { name = "Sam Paech" }
 ]
 requires-python = ">=3.11"
 dependencies = [
