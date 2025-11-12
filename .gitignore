@@ -6,3 +6,6 @@ results
 bct.txt
 dist/
 config/
+.venv/
+.ruff_cache/
+
