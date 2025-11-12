@@ -23,7 +23,7 @@ dependencies = [
 ]
 
 [project.scripts]
-antislop-vllm = "antislop_vllm:main"
+antislop-vllm = "antislop_vllm.main:main_cli"
 
 [build-system]
 requires = ["hatchling"]
